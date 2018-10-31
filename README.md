@@ -165,51 +165,51 @@ When this API is invoked following entities (i.e. metrics and histograms) are re
 
 ### Request Gauges
 
-| Entity Name                                                  | Entity Type | source | application |   cluster |   service |   shard |             jersey.resource.class | jersey.resource.method |
-| ------------------------------------------------------------ | :---------: | -----: | ----------: | --------: | --------: | ------: | --------------------------------: | ---------------------: |
-| jaxrs.server.request.inventory.orders.fulfilled.GET.inflight |    Gauge    | host-1 |    Ordering | us-west-1 | Inventory | primary | com.ordering.InventoryWebResource |  getAllFulfilledOrders |
-| jaxrs.server.total_requests.inflight                         |    Gauge    | host-1 |    Ordering | us-west-1 | Inventory | primary |                               n/a |                    n/a |
+| Entity Name                                                  | Entity Type | source | application | cluster   | service   | shard   | jaxrs.resource.class              | jaxrs.resource.method |
+| :----------------------------------------------------------- | :---------- | :----- | :---------- | :-------- | :-------- | :------ | :-------------------------------- | :-------------------- |
+| jaxrs.server.request.inventory.orders.fulfilled.GET.inflight | Gauge       | host-1 | Ordering    | us-west-1 | Inventory | primary | com.ordering.InventoryWebResource | getAllFulfilledOrders |
+| jaxrs.server.total_requests.inflight                         | Gauge       | host-1 | Ordering    | us-west-1 | Inventory | primary | n/a                               | n/a                   |
 
 ### Granular Response related metrics
 
-| Entity Name                                                  | Entity Type  |             source | application |   cluster |   service |   shard |              jaxrs.resource.class | jaxrs.resource.method |
-| ------------------------------------------------------------ | :----------: | -----------------: | ----------: | --------: | --------: | ------: | --------------------------------: | --------------------: |
-| jaxrs.server.response.inventory.orders.fulfilled.GET.200.cumulative.count |   Counter    |             host-1 |    Ordering | us-west-1 | Inventory | primary | com.ordering.InventoryWebResource | getAllFulfilledOrders |
-| jaxrs.server.response.inventory.orders.fulfilled.GET.200.aggregated_per_shard.count | DeltaCounter | wavefront-provided |    Ordering | us-west-1 | Inventory | primary | com.ordering.InventoryWebResource | getAllFulfilledOrders |
-| jaxrs.server.response.inventory.orders.fulfilled.GET.200.aggregated_per_service.count | DeltaCounter | wavefront-provided |    Ordering | us-west-1 | Inventory |     n/a | com.ordering.InventoryWebResource | getAllFulfilledOrders |
-| jaxrs.server.response.inventory.orders.fulfilled.GET.200.aggregated_per_cluster.count | DeltaCounter | wavefront-provided |    Ordering | us-west-1 |       n/a |     n/a | com.ordering.InventoryWebResource | getAllFulfilledOrders |
-| jaxrs.server.response.inventory.orders.fulfilled.GET.200.aggregated_per_appliation.count | DeltaCounter | wavefront-provided |    Ordering |       n/a |       n/a |     n/a | com.ordering.InventoryWebResource | getAllFulfilledOrders |
+| Entity Name                                                  | Entity Type  | source             | application | cluster   | service   | shard   | jaxrs.resource.class              | jaxrs.resource.method |
+| ------------------------------------------------------------ | :----------- | :----------------- | :---------- | :-------- | :-------- | :------ | :-------------------------------- | :-------------------- |
+| jaxrs.server.response.inventory.orders.fulfilled.GET.200.cumulative.count | Counter      | host-1             | Ordering    | us-west-1 | Inventory | primary | com.ordering.InventoryWebResource | getAllFulfilledOrders |
+| jaxrs.server.response.inventory.orders.fulfilled.GET.200.aggregated_per_shard.count | DeltaCounter | wavefront-provided | Ordering    | us-west-1 | Inventory | primary | com.ordering.InventoryWebResource | getAllFulfilledOrders |
+| jaxrs.server.response.inventory.orders.fulfilled.GET.200.aggregated_per_service.count | DeltaCounter | wavefront-provided | Ordering    | us-west-1 | Inventory | n/a     | com.ordering.InventoryWebResource | getAllFulfilledOrders |
+| jaxrs.server.response.inventory.orders.fulfilled.GET.200.aggregated_per_cluster.count | DeltaCounter | wavefront-provided | Ordering    | us-west-1 | n/a       | n/a     | com.ordering.InventoryWebResource | getAllFulfilledOrders |
+| jaxrs.server.response.inventory.orders.fulfilled.GET.200.aggregated_per_appliation.count | DeltaCounter | wavefront-provided | Ordering    | n/a       | n/a       | n/a     | com.ordering.InventoryWebResource | getAllFulfilledOrders |
 
 ### Granular Response related histograms
 
-| Entity Name                                                  |    Entity Type     | source | application |   cluster |   service |   shard |              jaxrs.resource.class | jaxrs.resource.method |
-| ------------------------------------------------------------ | :----------------: | -----: | ----------: | --------: | --------: | ------: | --------------------------------: | --------------------: |
-| jaxrs.server.response.inventory.orders.fulfilled.GET.200.latency | WavefrontHistogram | host-1 |    Ordering | us-west-1 | Inventory | primary | com.ordering.InventoryWebResource | getAllFulfilledOrders |
-| jaxrs.server.response.inventory.orders.fulfilled.GET.200.cpu_ns | WavefrontHistogram | host-1 |    Ordering | us-west-1 | Inventory | primary | com.ordering.InventoryWebResource | getAllFulfilledOrders |
+| Entity Name                                                  | Entity Type        | source | application | cluster   | service   | shard   | jaxrs.resource.class              | jaxrs.resource.method |
+| :----------------------------------------------------------- | :----------------- | :----- | :---------- | :-------- | :-------- | :------ | :-------------------------------- | :-------------------- |
+| jaxrs.server.response.inventory.orders.fulfilled.GET.200.latency | WavefrontHistogram | host-1 | Ordering    | us-west-1 | Inventory | primary | com.ordering.InventoryWebResource | getAllFulfilledOrders |
+| jaxrs.server.response.inventory.orders.fulfilled.GET.200.cpu_ns | WavefrontHistogram | host-1 | Ordering    | us-west-1 | Inventory | primary | com.ordering.InventoryWebResource | getAllFulfilledOrders |
 
 ### Overall Response related metrics
 
 This includes all the completed requests that returned a response (i.e. success + errors).
 
-| Entity Name                                                  | Entity Type  |            source | application |   cluster |   service |   shard |
-| ------------------------------------------------------------ | :----------: | ----------------: | ----------: | --------: | --------: | ------: |
-| jaxrs.server.response.completed.aggregated_per_source.count  |   Counter    |            host-1 |    Ordering | us-west-1 | Inventory | primary |
-| jaxrs.server.response.completed.aggregated_per_shard.count   | DeltaCounter | wavefont-provided |    Ordering | us-west-1 | Inventory | primary |
-| jaxrs.server.response.completed.aggregated_per_service.count | DeltaCounter | wavefont-provided |    Ordering | us-west-1 | Inventory |     n/a |
-| jaxrs.server.response.completed.aggregated_per_cluster.count | DeltaCounter | wavefont-provided |    Ordering | us-west-1 |       n/a |     n/a |
-| jaxrs.server.response.completed.aggregated_per_application.count | DeltaCounter | wavefont-provided |    Ordering |       n/a |       n/a |     n/a |
+| Entity Name                                                  | Entity Type  | source            | application |   cluster |   service |   shard |
+| :----------------------------------------------------------- | :----------- | :---------------- | :---------- | --------: | --------: | ------: |
+| jaxrs.server.response.completed.aggregated_per_source.count  | Counter      | host-1            | Ordering    | us-west-1 | Inventory | primary |
+| jaxrs.server.response.completed.aggregated_per_shard.count   | DeltaCounter | wavefont-provided | Ordering    | us-west-1 | Inventory | primary |
+| jaxrs.server.response.completed.aggregated_per_service.count | DeltaCounter | wavefont-provided | Ordering    | us-west-1 | Inventory |     n/a |
+| jaxrs.server.response.completed.aggregated_per_cluster.count | DeltaCounter | wavefont-provided | Ordering    | us-west-1 |       n/a |     n/a |
+| jaxrs.server.response.completed.aggregated_per_application.count | DeltaCounter | wavefont-provided | Ordering    |       n/a |       n/a |     n/a |
 
 ### Overall Error Response related metrics
 
 This includes all the completed requests that resulted in an error response (that is HTTP status code of 4xx or 5xx).
 
-| Entity Name                                                  | Entity Type  |            source | application |   cluster |   service |   shard |
-| ------------------------------------------------------------ | :----------: | ----------------: | ----------: | --------: | --------: | ------: |
-| jaxrs.server.response.errors.aggregated_per_source.count     |   Counter    |            host-1 |    Ordering | us-west-1 | Inventory | primary |
-| jaxrs.server.response.errors.aggregated_per_shard.count      | DeltaCounter | wavefont-provided |    Ordering | us-west-1 | Inventory | primary |
-| jaxrs.server.response.errors.aggregated_per_service.count    | DeltaCounter | wavefont-provided |    Ordering | us-west-1 | Inventory |     n/a |
-| jaxrs.server.response.errors.aggregated_per_cluster.count    | DeltaCounter | wavefont-provided |    Ordering | us-west-1 |       n/a |     n/a |
-| jaxrs.server.response.errors.aggregated_per_application.count | DeltaCounter | wavefont-provided |    Ordering |       n/a |       n/a |     n/a |
+| Entity Name                                                  | Entity Type  | source            | application | cluster   | service   | shard   |
+| :----------------------------------------------------------- | :----------- | :---------------- | :---------- | :-------- | :-------- | :------ |
+| jaxrs.server.response.errors.aggregated_per_source.count     | Counter      | host-1            | Ordering    | us-west-1 | Inventory | primary |
+| jaxrs.server.response.errors.aggregated_per_shard.count      | DeltaCounter | wavefont-provided | Ordering    | us-west-1 | Inventory | primary |
+| jaxrs.server.response.errors.aggregated_per_service.count    | DeltaCounter | wavefont-provided | Ordering    | us-west-1 | Inventory | n/a     |
+| jaxrs.server.response.errors.aggregated_per_cluster.count    | DeltaCounter | wavefont-provided | Ordering    | us-west-1 | n/a       | n/a     |
+| jaxrs.server.response.errors.aggregated_per_application.count | DeltaCounter | wavefont-provided | Ordering    | n/a       | n/a       | n/a     |
 
 ### Tracing Spans
 
