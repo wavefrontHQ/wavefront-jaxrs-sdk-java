@@ -172,6 +172,10 @@ public class WavefrontJaxrsFilter implements ContainerRequestFilter, ContainerRe
         return;
       }
       String requestMetricKey = requestOptionalPair.get()._1;
+      if (tracer != null) {
+        String matchingPath = requestOptionalPair.get()._2;
+        containerResponseContext.getHeaders().add("WF_SPAN_OPERATION_NAME", matchingPath);
+      }
       Optional<String> responseOptionalPair = MetricNameUtils.metricName(containerRequestContext,
           containerResponseContext);
       if (!responseOptionalPair.isPresent()) {
