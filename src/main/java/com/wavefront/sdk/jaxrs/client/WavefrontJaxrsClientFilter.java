@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.ws.rs.client.ClientRequestContext;
 import javax.ws.rs.client.ClientRequestFilter;
@@ -36,14 +37,13 @@ public class WavefrontJaxrsClientFilter implements ClientRequestFilter, ClientRe
   private final Tracer tracer;
   private final List<ClientSpanDecorator> spanDecorators;
 
-  public WavefrontJaxrsClientFilter(WavefrontSender sender, ApplicationTags applicationTags,
-                                    String source, @Nullable Tracer tracer) {
+  public WavefrontJaxrsClientFilter(WavefrontSender wfSender, ApplicationTags applicationTags,
+                                    @Nonnull String source, @Nullable Tracer tracer) {
     this.tracer = tracer;
     this.spanDecorators = Arrays.asList(ClientSpanDecorator.STANDARD_TAGS,
         ClientSpanDecorator.WF_PATH_OPERATION_NAME);
-    HeartbeaterService heartbeaterService = new HeartbeaterService(sender, applicationTags,
+    HeartbeaterService heartbeaterService = new HeartbeaterService(wfSender, applicationTags,
         JAXRS_CLIENT_COMPONENT, source);
-    heartbeaterService.run();
   }
 
   @Override
