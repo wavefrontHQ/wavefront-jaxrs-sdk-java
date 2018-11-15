@@ -1,6 +1,6 @@
 package com.wavefront.sdk.jaxrs;
 
-import com.wavefront.sdk.jaxrs.client.ClientTracingFilter;
+import com.wavefront.sdk.jaxrs.client.WavefrontJaxrsClientFilter;
 
 import io.opentracing.References;
 
@@ -19,11 +19,16 @@ public class Constants {
   /**
    * Property name of the active span
    */
-  public static final String PROPERTY_NAME = ClientTracingFilter.class.getName() + ".activeSpan";
+  public static final String PROPERTY_NAME = WavefrontJaxrsClientFilter.class.getName() + ".activeSpan";
 
   /**
    * Property name of the child span
    */
-  public static final String CHILD_OF = ClientTracingFilter.class.getName() + "." +
+  public static final String CHILD_OF = WavefrontJaxrsClientFilter.class.getName() + "." +
       References.CHILD_OF;
+
+  /**
+   * Component name of the JAX-RS client
+   */
+  public static final String JAXRS_CLIENT_COMPONENT = "jaxrs-client";
 }

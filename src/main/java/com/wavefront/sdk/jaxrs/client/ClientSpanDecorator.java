@@ -9,6 +9,7 @@ import io.opentracing.tag.Tags;
 import javax.ws.rs.client.ClientRequestContext;
 import javax.ws.rs.client.ClientResponseContext;
 
+import static com.wavefront.sdk.jaxrs.Constants.JAXRS_CLIENT_COMPONENT;
 import static com.wavefront.sdk.jaxrs.Constants.WF_SPAN_HEADER;
 
 /**
@@ -37,7 +38,7 @@ public interface ClientSpanDecorator {
   ClientSpanDecorator STANDARD_TAGS = new ClientSpanDecorator() {
     @Override
     public void decorateRequest(ClientRequestContext requestContext, Span span) {
-      Tags.COMPONENT.set(span, "jaxrs-client");
+      Tags.COMPONENT.set(span, JAXRS_CLIENT_COMPONENT);
       Tags.HTTP_METHOD.set(span, requestContext.getMethod());
       try {
         Tags.HTTP_URL.set(span, requestContext.getUri().toURL().toString());

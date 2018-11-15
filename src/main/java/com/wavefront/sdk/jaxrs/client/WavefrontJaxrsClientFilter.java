@@ -1,5 +1,9 @@
 package com.wavefront.sdk.jaxrs.client;
 
+import com.wavefront.sdk.common.WavefrontSender;
+import com.wavefront.sdk.common.application.ApplicationTags;
+import com.wavefront.sdk.common.application.HeartbeaterService;
+
 import io.opentracing.Span;
 import io.opentracing.SpanContext;
 import io.opentracing.Tracer;
@@ -17,6 +21,7 @@ import javax.ws.rs.client.ClientRequestFilter;
 import javax.ws.rs.client.ClientResponseContext;
 import javax.ws.rs.client.ClientResponseFilter;
 
+import static com.wavefront.sdk.jaxrs.Constants.JAXRS_CLIENT_COMPONENT;
 import static com.wavefront.sdk.jaxrs.Constants.PROPERTY_NAME;
 import static com.wavefront.sdk.jaxrs.Constants.CHILD_OF;
 
@@ -25,16 +30,20 @@ import static com.wavefront.sdk.jaxrs.Constants.CHILD_OF;
  *
  * @author Hao Song (songhao@vmware.com).
  */
-public class ClientTracingFilter implements ClientRequestFilter, ClientResponseFilter {
+public class WavefrontJaxrsClientFilter implements ClientRequestFilter, ClientResponseFilter {
 
   @Nullable
   private final Tracer tracer;
   private final List<ClientSpanDecorator> spanDecorators;
 
-  public ClientTracingFilter(@Nullable Tracer tracer) {
+  public WavefrontJaxrsClientFilter(WavefrontSender sender, ApplicationTags applicationTags,
+                                    String source, @Nullable Tracer tracer) {
     this.tracer = tracer;
     this.spanDecorators = Arrays.asList(ClientSpanDecorator.STANDARD_TAGS,
         ClientSpanDecorator.WF_PATH_OPERATION_NAME);
+    HeartbeaterService heartbeaterService = new HeartbeaterService(sender, applicationTags,
+        JAXRS_CLIENT_COMPONENT, source);
+    heartbeaterService.run();
   }
 
   @Override
