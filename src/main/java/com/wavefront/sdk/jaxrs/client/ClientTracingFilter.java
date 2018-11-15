@@ -28,8 +28,8 @@ import static com.wavefront.sdk.jaxrs.Constants.CHILD_OF;
 public class ClientTracingFilter implements ClientRequestFilter, ClientResponseFilter {
 
   @Nullable
-  private Tracer tracer;
-  private List<ClientSpanDecorator> spanDecorators;
+  private final Tracer tracer;
+  private final List<ClientSpanDecorator> spanDecorators;
 
   public ClientTracingFilter(@Nullable Tracer tracer) {
     this.tracer = tracer;
@@ -72,5 +72,4 @@ public class ClientTracingFilter implements ClientRequestFilter, ClientResponseF
       }
     }
   }
-
 }

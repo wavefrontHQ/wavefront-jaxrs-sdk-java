@@ -9,6 +9,8 @@ import javax.ws.rs.core.MultivaluedMap;
 
 /**
  * Helper class used to add carrier data to HTTP headers.
+ *
+ * @author Hao Song (songhao@vmware.com).
  */
 public class ClientHeadersInjectTextMap implements TextMap {
 
@@ -28,5 +30,4 @@ public class ClientHeadersInjectTextMap implements TextMap {
   public void put(String key, String value) {
     headers.add(key, value);
   }
-
 }

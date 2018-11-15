@@ -61,16 +61,16 @@ public interface ClientSpanDecorator {
    * For non-instrumented server side, the operation name will be just HTTP method name.
    */
   ClientSpanDecorator WF_PATH_OPERATION_NAME = new ClientSpanDecorator() {
-    String methodName = "";
+    ThreadLocal<String> methodName = new ThreadLocal<>();
 
     @Override
     public void decorateRequest(ClientRequestContext clientRequestContext, Span span) {
-      this.methodName = clientRequestContext.getMethod();
+      this.methodName.set(clientRequestContext.getMethod());
     }
 
     @Override
     public void decorateResponse(ClientResponseContext response, Span span) {
-      String operationName = this.methodName;
+      String operationName = this.methodName.get();
       if (response.getHeaders().containsKey(WF_SPAN_HEADER)) {
         operationName += "-" + String.valueOf(response.getHeaders().getFirst(WF_SPAN_HEADER));
       }
