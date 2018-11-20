@@ -1,4 +1,4 @@
-# wavefront-jaxrs-sdk-java
+# wavefront-jaxrs-sdk-java [![build status][ci-img]][ci] [![Released Version][maven-img]][maven]
 
 The Wavefront by VMware JAX-RS SDK for Java provides out-of-the-box trace data from JAX-RS based clients in your Java application. You can analyze the tracing data in [Wavefront](https://www.wavefront.com/) to better understand how your application is performing in production. If you have multiple services running, you can instrument your server-side service with our [Wavefront Jersey SDK](https://github.com/wavefrontHQ/wavefront-jersey-sdk-java) to form a complete trace.
 
@@ -10,9 +10,11 @@ If you are using Maven, add the following maven dependency to your `pom.xml`:
 <dependency>
     <groupId>com.wavefront</groupId>
     <artifactId>wavefront-jaxrs-sdk-java</artifactId>
-    <version>0.9.0</version>
+    <version>$releaseVersion</version>
 </dependency>
 ```
+
+Replace `$releaseVersion` with the latest version available on [maven](http://search.maven.org/#search%7Cga%7C1%7Cwavefront-jaxrs-sdk-jvm).
 
 ## WavefrontJaxrsClientFilter
 
@@ -33,7 +35,7 @@ Application tags determine the metadata (point tags and span tags) that are incl
 
 You encapsulate application tags in an `ApplicationTags` object. See [Instantiating ApplicationTags](https://github.com/wavefrontHQ/wavefront-sdk-java/blob/master/docs/apptags.md) for details.
 
-### 2. Set Up a WavefrontSender 
+### 2. Set Up a WavefrontSender
 
 A `WavefrontSender` object implements the low-level interface for sending data to Wavefront. You can choose to send data to Wavefront using either the [Wavefront proxy](https://docs.wavefront.com/proxies.html) or [direct ingestion](https://docs.wavefront.com/direct_ingestion.html).
 
@@ -44,10 +46,10 @@ A `WavefrontSender` object implements the low-level interface for sending data t
 
 ### 3. Set Up a WavefrontSpanReporter
 
-A `WavefrontSpanReporter` reports trace data to Wavefront. 
+A `WavefrontSpanReporter` reports trace data to Wavefront.
 To build a `WavefrontSpanReporter`, you specify:
 * The `WavefrontSender` you created above.
-* The source of the reported trace data, typically the name of the host that the code is running on. 
+* The source of the reported trace data, typically the name of the host that the code is running on.
 
 ```java
 sourceName = "mySource"; // Example - Replace value!
@@ -68,7 +70,7 @@ WavefrontTracer wfTracer = new WavefrontTracer.Builder(wfSpanReporter,
 
 ### 5. Set Up a WavefrontJaxrsClientFilter
 
-To build the `WavefrontJaxrsClientFilter`, you specify: 
+To build the `WavefrontJaxrsClientFilter`, you specify:
 * The `WavefrontSender`, `ApplicationTags` and `WavefrontTracer` you created above.
 * The same source that you specified when creating the `WavefrontSpanReporter`.
 
@@ -86,3 +88,7 @@ For any JAX-RS-compliant `ClientBuilder`, register your filter as follows:
 clientBuilder.register(filter);
 ```
 
+[ci-img]: https://travis-ci.com/wavefrontHQ/wavefront-jaxrs-sdk-java.svg?branch=master
+[ci]: https://travis-ci.com/wavefrontHQ/wavefront-jaxrs-sdk-java
+[maven-img]: https://img.shields.io/maven-central/v/com.wavefront/wavefront-jaxrs-sdk-java.svg?maxAge=2592000
+[maven]: http://search.maven.org/#search%7Cga%7C1%7Cwavefront-jaxrs-sdk-java
