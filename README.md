@@ -52,7 +52,7 @@ To build a `WavefrontSpanReporter`, you specify:
 ```java
 sourceName = "mySource"; // Example - Replace value!
 Reporter wfSpanReporter = new WavefrontSpanReporter.Builder().
-    withSource("sourceName").build(wavefrontSender);
+    withSource(sourceName).build(wavefrontSender);
 ```
 
 ### 4. Set Up a WavefrontTracer
