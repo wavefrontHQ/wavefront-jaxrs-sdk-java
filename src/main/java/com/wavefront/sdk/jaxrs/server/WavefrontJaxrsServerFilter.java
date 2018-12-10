@@ -67,7 +67,7 @@ public class WavefrontJaxrsServerFilter implements ContainerRequestFilter, Conta
   private ResourceInfo resourceInfo;
 
   private WavefrontJaxrsServerFilter(SdkReporter wfJaxrsReporter, ApplicationTags applicationTags,
-                               @Nullable Tracer tracer) {
+                                     @Nullable Tracer tracer) {
     if (wfJaxrsReporter == null)
       throw new NullPointerException("Invalid JAX-RS Reporter");
     if (applicationTags == null)
@@ -164,7 +164,6 @@ public class WavefrontJaxrsServerFilter implements ContainerRequestFilter, Conta
       }
     }
     if (containerRequestContext != null) {
-
       Pair<String, String> pair = getClassAndMethodName(resourceInfo);
       String finalClassName = pair._1;
       String finalMethodName = pair._2;
@@ -305,11 +304,11 @@ public class WavefrontJaxrsServerFilter implements ContainerRequestFilter, Conta
 
       /*
        * Overall error response metrics
-       * 1) <prefix>.response.errors.aggregated_per_source (Counter)
-       * 2) <prefix>.response.errors.aggregated_per_shard (DeltaCounter)
-       * 3) <prefix>.response.errors.aggregated_per_service (DeltaCounter)
-       * 4) <prefix>.response.errors.aggregated_per_cluster (DeltaCounter)
-       * 5) <prefix>.response.errors.aggregated_per_application (DeltaCounter)
+       * 1) jaxrs.server.response.errors.aggregated_per_source (Counter)
+       * 2) jaxrs.server.response.errors.aggregated_per_shard (DeltaCounter)
+       * 3) jaxrs.server.response.errors.aggregated_per_service (DeltaCounter)
+       * 4) jaxrs.server.response.errors.aggregated_per_cluster (DeltaCounter)
+       * 5) jaxrs.server.response.errors.aggregated_per_application (DeltaCounter)
        */
       if (isErrorStatusCode(containerResponseContext)) {
         wfJaxrsReporter.incrementCounter(new MetricName(responseMetricKeyWithoutStatus + ".errors",
@@ -369,7 +368,7 @@ public class WavefrontJaxrsServerFilter implements ContainerRequestFilter, Conta
       wfJaxrsReporter.updateHistogram(new MetricName(responseMetricKey + ".latency",
           completeTagsMap), apiLatency);
           
-      /**
+      /*
        * total time spent counter: jaxrs.server.response.api.v2.alert.summary.GET.200.total_time
        */
       wfJaxrsReporter.incrementCounter(new MetricName(responseMetricKey + ".total_time",
