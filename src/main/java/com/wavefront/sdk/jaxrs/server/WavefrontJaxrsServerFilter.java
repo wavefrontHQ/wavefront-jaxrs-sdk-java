@@ -368,6 +368,12 @@ public class WavefrontJaxrsServerFilter implements ContainerRequestFilter, Conta
       long apiLatency = System.currentTimeMillis() - startTime.get();
       wfJaxrsReporter.updateHistogram(new MetricName(responseMetricKey + ".latency",
           completeTagsMap), apiLatency);
+          
+      /**
+       * total time spent counter: jaxrs.server.response.api.v2.alert.summary.GET.200.total_time
+       */
+      wfJaxrsReporter.incrementCounter(new MetricName(responseMetricKey + ".total_time",
+          completeTagsMap), apiLatency);
     }
   }
 
