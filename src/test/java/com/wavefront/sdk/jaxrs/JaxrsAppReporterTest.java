@@ -51,14 +51,14 @@ public class JaxrsAppReporterTest {
 
   @Test
   public void testCRUD() throws URISyntaxException, IOException {
-//    testCreate();
-//    testRead();
-//    testUpdate();
-//    testDelete();
-//    testGetAll();
+    testCreate();
+    testRead();
+    testUpdate();
+    testDelete();
+    testGetAll();
+    testError();
+    testOverallAggregatedMetrics();
     testGetDuplicatePathArgs();
-//    testError();
-//    testOverallAggregatedMetrics();
   }
 
   private void testCreate() throws IOException {
