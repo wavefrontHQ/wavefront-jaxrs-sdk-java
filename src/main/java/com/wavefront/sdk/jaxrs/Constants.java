@@ -31,4 +31,19 @@ public class Constants {
    * Component name of the JAX-RS client
    */
   public static final String JAXRS_CLIENT_COMPONENT = "jaxrs-client";
+
+  /**
+   * Component name of the JAX-RS server
+   */
+  public static final String JAXRS_SERVER_COMPONENT = "jaxrs-server";
+
+  /**
+   * Prefix for request
+   */
+  public static final String REQUEST_PREFIX = "request.";
+
+  /**
+   * Prefix for response
+   */
+  public static final String RESPONSE_PREFIX = "response.";
 }
