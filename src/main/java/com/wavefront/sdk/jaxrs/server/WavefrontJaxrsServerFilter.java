@@ -102,7 +102,6 @@ public class WavefrontJaxrsServerFilter implements ContainerRequestFilter, Conta
 
   @Override
   public void filter(ContainerRequestContext containerRequestContext) throws IOException {
-    System.out.println("Enter JAX-RS Filter");
     if (containerRequestContext != null) {
       startTime.set(System.currentTimeMillis());
       startTimeCpuNanos.set(ManagementFactory.getThreadMXBean().getCurrentThreadCpuTime());
