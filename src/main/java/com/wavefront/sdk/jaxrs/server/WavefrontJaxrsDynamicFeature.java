@@ -31,14 +31,13 @@ public class WavefrontJaxrsDynamicFeature implements DynamicFeature {
 
   @Override
   public void configure(ResourceInfo resourceInfo, FeatureContext featureContext) {
-    WavefrontReportingConfig wfReportingConfig = this.wavefrontReportingConfig;
-    String source = wfReportingConfig.getSource();
-    WavefrontSender wavefrontSender = constructWavefrontSender(wfReportingConfig);
+    String source = this.wavefrontReportingConfig.getSource();
+    WavefrontSender wavefrontSender = constructWavefrontSender(this.wavefrontReportingConfig);
     WavefrontJaxrsReporter wfJaxrsReporter = new WavefrontJaxrsReporter.Builder
         (applicationTags).withSource(source).build(wavefrontSender);
     WavefrontJaxrsServerFilter.Builder wfJaxrsFilterBuilder = new WavefrontJaxrsServerFilter.Builder
         (wfJaxrsReporter, applicationTags);
-    if (BooleanUtils.isTrue(wfReportingConfig.getReportTraces())) {
+    if (BooleanUtils.isTrue(this.wavefrontReportingConfig.getReportTraces())) {
       WavefrontSpanReporter wfSpanReporter;
       wfSpanReporter = new WavefrontSpanReporter.Builder().withSource(source).build(wavefrontSender);
       Tracer tracer = new WavefrontTracer.Builder(wfSpanReporter, applicationTags).build();
