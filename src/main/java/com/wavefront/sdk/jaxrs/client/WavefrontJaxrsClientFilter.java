@@ -13,6 +13,7 @@ import io.opentracing.tag.Tags;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Nonnull;
@@ -43,7 +44,7 @@ public class WavefrontJaxrsClientFilter implements ClientRequestFilter, ClientRe
     this.spanDecorators = Arrays.asList(ClientSpanDecorator.STANDARD_TAGS,
         ClientSpanDecorator.WF_PATH_OPERATION_NAME);
     HeartbeaterService heartbeaterService = new HeartbeaterService(wfSender, applicationTags,
-        JAXRS_CLIENT_COMPONENT, source);
+            Collections.singletonList(JAXRS_CLIENT_COMPONENT), source);
   }
 
   @Override
