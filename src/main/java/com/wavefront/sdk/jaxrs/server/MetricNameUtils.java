@@ -47,9 +47,26 @@ abstract class MetricNameUtils {
   private static Optional<Pair<String, String>> metricNameAndPath(ResourceInfo resourceInfo,
                                                                   ContainerRequestContext request) {
     Class<?> clazz = resourceInfo.getResourceClass();
+    String classPath = extractPath(clazz.getAnnotation(Path.class));
     Method method = resourceInfo.getResourceMethod();
-    String path = extractPath(clazz.getAnnotation(Path.class)) + extractPath(method.
-        getAnnotation(Path.class));
+    String methodPath = extractPath(method.getAnnotation(Path.class));
+    if (classPath.isEmpty() || methodPath.isEmpty()) {
+      Class<?>[] interfaces = clazz.getInterfaces();
+      for (Class<?> c : interfaces) {
+        try {
+          Method declaringMethod = c.getMethod(method.getName(), method.getParameterTypes());
+          if (classPath.isEmpty()) {
+            classPath = extractPath(c.getAnnotation(Path.class));
+          }
+          if (methodPath.isEmpty()) {
+            methodPath = extractPath(declaringMethod.getAnnotation(Path.class));
+          }
+        } catch (NoSuchMethodException e) {
+          e.printStackTrace();
+        }
+      }
+    }
+    String path = classPath + methodPath;
     Optional<String> optionalMetricName = metricName(request.getMethod(), path);
     String matchingPath = stripLeadingAndTrailingSlashes(path);
     return optionalMetricName.map(metricName -> new Pair<>(metricName, matchingPath));
