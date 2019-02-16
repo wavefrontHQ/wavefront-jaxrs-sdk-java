@@ -12,6 +12,7 @@ import javax.annotation.Nullable;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -45,7 +46,7 @@ public class WavefrontJaxrsReporter implements SdkReporter {
     this.wfReporter = wfReporter;
     this.reportingIntervalSeconds = reportingIntervalSeconds;
     heartbeaterService = new HeartbeaterService(wavefrontMetricSender, applicationTags,
-        JAXRS_SERVER_COMPONENT, source);
+            Collections.singletonList(JAXRS_SERVER_COMPONENT), source);
   }
 
   @Override
