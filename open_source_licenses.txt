@@ -1,6 +1,6 @@
 ﻿open_source_license.txt
 
-Wavefront by VMware JAX-RS SDK for Java 0.9.2 GA
+Wavefront by VMware JAX-RS SDK for Java 0.9.3 GA
 
 ======================================================================
 
@@ -811,4 +811,4 @@ Source Files is valid for three years from the date you acquired or last used th
 Software product. Alternatively, the Source Files may accompany the
 VMware service.
 
-[WAVEFRONTJAXRSSDKJAVA092GAAB043019]
+[WAVEFRONTJAXRSSDKJAVA093GAAB043019]
