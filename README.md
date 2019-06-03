@@ -14,7 +14,7 @@ If you are using Maven, add the following maven dependency to your `pom.xml`:
 </dependency>
 ```
 
-Replace `$releaseVersion` with the latest version available on [maven](http://search.maven.org/#search%7Cga%7C1%7Cwavefront-jaxrs-sdk-jvm).
+Replace `$releaseVersion` with the latest version available on [maven](http://search.maven.org/#search%7Cga%7C1%7Cwavefront-jaxrs-sdk-java).
 
 ## WavefrontJaxrsClientFilter
 
