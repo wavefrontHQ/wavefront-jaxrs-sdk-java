@@ -27,25 +27,6 @@ abstract class MetricNameUtils {
    */
   static Optional<Pair<String, String>> metricNameAndPath(ContainerRequestContext request,
                                                           ResourceInfo resourceInfo) {
-    return metricNameAndPath(resourceInfo, request);
-  }
-
-  /**
-   * Util to generate metric name from the JAX-RS container response.
-   *
-   * @param request  JAX-RS container request.
-   * @param response JAX-RS container response.
-   * @return generated metric name from the JAX-RS container request/response.
-   */
-  static Optional<String> metricName(ContainerRequestContext request,
-                                     ContainerResponseContext response,
-                                     ResourceInfo resourceInfo) {
-    Optional<Pair<String, String>> optionalMetricName = metricNameAndPath(resourceInfo, request);
-    return optionalMetricName.map(metricName -> metricName._1 + "." + response.getStatus());
-  }
-
-  private static Optional<Pair<String, String>> metricNameAndPath(ResourceInfo resourceInfo,
-                                                                  ContainerRequestContext request) {
     Class<?> clazz = resourceInfo.getResourceClass();
     String classPath = extractPath(clazz.getAnnotation(Path.class));
     Method method = resourceInfo.getResourceMethod();
