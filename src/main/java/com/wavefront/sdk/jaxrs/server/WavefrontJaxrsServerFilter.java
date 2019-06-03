@@ -37,6 +37,8 @@ import java.util.AbstractMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 import static com.wavefront.sdk.common.Constants.NULL_TAG_VAL;
@@ -54,10 +56,10 @@ import static com.wavefront.sdk.jaxrs.Constants.WF_SPAN_HEADER;
  */
 public class WavefrontJaxrsServerFilter implements ContainerRequestFilter, ContainerResponseFilter {
 
+  private static final Logger logger = Logger.getLogger(WavefrontJaxrsServerFilter.class.getName());
   private final SdkReporter wfJaxrsReporter;
   private final ApplicationTags applicationTags;
-  private final ThreadLocal<Long> startTime = new ThreadLocal<>();
-  private final ThreadLocal<Long> startTimeCpuNanos = new ThreadLocal<>();
+  private final ThreadLocal<StatsContext> statsContextThreadLocal = new ThreadLocal<>();
   private final ConcurrentMap<MetricName, AtomicInteger> gauges = new ConcurrentHashMap<>();
 
   @Nullable
@@ -97,17 +99,35 @@ public class WavefrontJaxrsServerFilter implements ContainerRequestFilter, Conta
     public WavefrontJaxrsServerFilter build() {
       return new WavefrontJaxrsServerFilter(wfJaxrsReporter, applicationTags, tracer);
     }
-
   }
 
   @Override
-  public void filter(ContainerRequestContext containerRequestContext) throws IOException {
+  public void filter(ContainerRequestContext containerRequestContext) {
+    try {
+      processRequest(containerRequestContext);
+    } catch (Throwable t) {
+      logger.log(Level.SEVERE, "Exception filtering jaxrs containerRequest", t);
+    }
+  }
+
+  @Override
+  public void filter(ContainerRequestContext containerRequestContext,
+                     ContainerResponseContext containerResponseContext) {
+    try {
+      processResponse(containerRequestContext, containerResponseContext);
+    } catch (Throwable t) {
+      logger.log(Level.SEVERE, "Exception filtering jaxrs containerResponse", t);
+    }
+  }
+
+  private void processRequest(ContainerRequestContext containerRequestContext) {
     if (containerRequestContext != null) {
-      startTime.set(System.currentTimeMillis());
-      startTimeCpuNanos.set(ManagementFactory.getThreadMXBean().getCurrentThreadCpuTime());
+      long startTime = System.currentTimeMillis();
+      long startTimeCpuNanos = ManagementFactory.getThreadMXBean().getCurrentThreadCpuTime();
       Optional<Pair<String, String>> optionalPair =
           MetricNameUtils.metricNameAndPath(containerRequestContext, resourceInfo);
       if (!optionalPair.isPresent()) {
+        statsContextThreadLocal.set(new StatsContext(startTime, startTimeCpuNanos, null, null));
         return;
       }
       String requestMetricKey = REQUEST_PREFIX + optionalPair.get()._1;
@@ -134,23 +154,25 @@ public class WavefrontJaxrsServerFilter implements ContainerRequestFilter, Conta
        * 1) jaxrs.server.request.api.v2.alert.summary.GET.inflight
        * 2) jaxrs.server.total_requests.inflight
        */
-      getGaugeValue(new MetricName(requestMetricKey + ".inflight",
-          getCompleteTagsMap(finalClassName, finalMethodName))).incrementAndGet();
-      getGaugeValue(new MetricName("total_requests.inflight",
+      AtomicInteger apiInflight = getGaugeValue(new MetricName(requestMetricKey + ".inflight",
+          getCompleteTagsMap(finalClassName, finalMethodName)));
+      apiInflight.incrementAndGet();
+      AtomicInteger totalInflight = getGaugeValue(new MetricName("total_requests.inflight",
           new HashMap<String, String>() {{
             put("cluster", applicationTags.getCluster() == null ? NULL_TAG_VAL :
                 applicationTags.getCluster());
             put("service", applicationTags.getService());
             put("shard", applicationTags.getShard() == null ? NULL_TAG_VAL :
                 applicationTags.getShard());
-          }})).incrementAndGet();
+          }}));
+      totalInflight.incrementAndGet();
+      statsContextThreadLocal.set(new StatsContext(startTime, startTimeCpuNanos, apiInflight,
+          totalInflight));
     }
   }
 
-  @Override
-  public void filter(ContainerRequestContext containerRequestContext,
-                     ContainerResponseContext containerResponseContext)
-      throws IOException {
+  private void processResponse(ContainerRequestContext containerRequestContext,
+                               ContainerResponseContext containerResponseContext) {
     if (tracer != null) {
       try {
         Scope scope = (Scope) containerRequestContext.getProperty(PROPERTY_NAME);
@@ -173,42 +195,17 @@ public class WavefrontJaxrsServerFilter implements ContainerRequestFilter, Conta
       if (!requestOptionalPair.isPresent()) {
         return;
       }
-      String requestMetricKey = REQUEST_PREFIX + requestOptionalPair.get()._1;
-      Optional<String> responseOptionalPair = MetricNameUtils.metricName(containerRequestContext,
-          containerResponseContext, resourceInfo);
-      if (!responseOptionalPair.isPresent()) {
-        return;
-      }
 
       if (tracer != null) {
         String matchingPath = requestOptionalPair.get()._2;
         containerResponseContext.getHeaders().add(WF_SPAN_HEADER, matchingPath);
       }
 
-      String responseMetricKey = RESPONSE_PREFIX + responseOptionalPair.get();
-
       String responseMetricKeyWithoutStatus = RESPONSE_PREFIX + requestOptionalPair.get()._1;
+      String responseMetricKey =
+          responseMetricKeyWithoutStatus + "." + containerResponseContext.getStatus();
 
-      /* Gauges
-       * 1) jaxrs.server.request.api.v2.alert.summary.GET.inflight
-       * 2) jaxrs.server.total_requests.inflight
-       */
       Map<String, String> completeTagsMap = getCompleteTagsMap(finalClassName, finalMethodName);
-
-      /*
-       * Okay to do map.get(key) as the key will definitely be present in the map during the
-       * response phase.
-       */
-      gauges.get(new MetricName(requestMetricKey + ".inflight", completeTagsMap)).
-          decrementAndGet();
-      gauges.get(new MetricName("total_requests.inflight",
-          new HashMap<String, String>() {{
-            put("cluster", applicationTags.getCluster() == null ? NULL_TAG_VAL :
-                applicationTags.getCluster());
-            put("service", applicationTags.getService());
-            put("shard", applicationTags.getShard() == null ? NULL_TAG_VAL :
-                applicationTags.getShard());
-          }})).decrementAndGet();
 
       // Response metrics and histograms below
       Map<String, String> aggregatedPerShardMap = new HashMap<String, String>() {{
@@ -354,25 +351,41 @@ public class WavefrontJaxrsServerFilter implements ContainerRequestFilter, Conta
       wfJaxrsReporter.incrementDeltaCounter(new MetricName("response" +
           ".completed.aggregated_per_application", overallAggregatedPerApplicationMap));
 
-      /*
-       * WavefrontHistograms
-       * 1) jaxrs.server.response.api.v2.alert.summary.GET.200.latency
-       * 2) jaxrs.server.response.api.v2.alert.summary.GET.200.cpu_ns
-       */
-      long cpuNanos = ManagementFactory.getThreadMXBean().getCurrentThreadCpuTime() -
-          startTimeCpuNanos.get();
-      wfJaxrsReporter.updateHistogram(new MetricName(responseMetricKey + ".cpu_ns",
-          completeTagsMap), cpuNanos);
+      StatsContext statsContext = statsContextThreadLocal.get();
+      if (statsContext != null) {
 
-      long apiLatency = System.currentTimeMillis() - startTime.get();
-      wfJaxrsReporter.updateHistogram(new MetricName(responseMetricKey + ".latency",
-          completeTagsMap), apiLatency);
+        /* Gauges - update api inflight and total inflight gauges
+         * 1) jersey.server.request.api.v2.alert.summary.GET.inflight
+         * 2) jersey.server.total_requests.inflight
+         */
+        if (statsContext.getApiInflight() != null) {
+          statsContext.getApiInflight().decrementAndGet();
+        }
 
-      /*
-       * total time spent counter: jaxrs.server.response.api.v2.alert.summary.GET.200.total_time
-       */
-      wfJaxrsReporter.incrementCounter(new MetricName(responseMetricKey + ".total_time",
-          completeTagsMap), apiLatency);
+        if (statsContext.getTotalInflight() != null) {
+          statsContext.getTotalInflight().decrementAndGet();
+        }
+
+        /*
+         * WavefrontHistograms
+         * 1) jaxrs.server.response.api.v2.alert.summary.GET.200.latency
+         * 2) jaxrs.server.response.api.v2.alert.summary.GET.200.cpu_ns
+         */
+        long cpuNanos = ManagementFactory.getThreadMXBean().getCurrentThreadCpuTime() -
+            statsContext.getStartCpuNanos();
+        wfJaxrsReporter.updateHistogram(new MetricName(responseMetricKey + ".cpu_ns",
+            completeTagsMap), cpuNanos);
+
+        long apiLatency = System.currentTimeMillis() - statsContext.getStartTime();
+        wfJaxrsReporter.updateHistogram(new MetricName(responseMetricKey + ".latency",
+            completeTagsMap), apiLatency);
+
+        /*
+         * total time spent counter: jaxrs.server.response.api.v2.alert.summary.GET.200.total_time
+         */
+        wfJaxrsReporter.incrementCounter(new MetricName(responseMetricKey + ".total_time",
+            completeTagsMap), apiLatency);
+      }
     }
   }
 
@@ -498,6 +511,39 @@ public class WavefrontJaxrsServerFilter implements ContainerRequestFilter, Conta
 
     public void remove() {
       throw new UnsupportedOperationException();
+    }
+  }
+
+  private class StatsContext {
+    private final long startTime;
+    private final long startCpuNanos;
+    @Nullable
+    private final AtomicInteger apiInflight;
+    @Nullable
+    private final AtomicInteger totalInflight;
+
+    StatsContext(long startTime, long startCpuNanos, AtomicInteger apiInflight,
+                 AtomicInteger totalInflight) {
+      this.startTime = startTime;
+      this.startCpuNanos = startCpuNanos;
+      this.apiInflight = apiInflight;
+      this.totalInflight = totalInflight;
+    }
+
+    public long getStartTime() {
+      return startTime;
+    }
+
+    public long getStartCpuNanos() {
+      return startCpuNanos;
+    }
+
+    public AtomicInteger getApiInflight() {
+      return apiInflight;
+    }
+
+    public AtomicInteger getTotalInflight() {
+      return totalInflight;
     }
   }
 }
