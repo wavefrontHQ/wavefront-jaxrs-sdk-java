@@ -9,6 +9,9 @@ import com.wavefront.sdk.jaxrs.reporter.WavefrontJaxrsReporter;
 
 import org.apache.commons.lang3.BooleanUtils;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.ws.rs.container.DynamicFeature;
 import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.FeatureContext;
@@ -26,7 +29,8 @@ public class WavefrontJaxrsDynamicFeature implements DynamicFeature {
   private Tracer tracer;
 
   public WavefrontJaxrsDynamicFeature(ApplicationTags applicationTags,
-                                      WavefrontReportingConfig wavefrontReportingConfig) {
+                                      WavefrontReportingConfig wavefrontReportingConfig,
+                                      Set<String> headerTags) {
     String source = wavefrontReportingConfig.getSource();
     WavefrontSender wavefrontSender = constructWavefrontSender(wavefrontReportingConfig);
     wavefrontJaxrsReporter = new WavefrontJaxrsReporter.Builder
@@ -38,6 +42,7 @@ public class WavefrontJaxrsDynamicFeature implements DynamicFeature {
       wfSpanReporter = new WavefrontSpanReporter.Builder().withSource(source).build(wavefrontSender);
       this.tracer = new WavefrontTracer.Builder(wfSpanReporter, applicationTags).build();
       wfJaxrsFilterBuilder.withTracer(this.tracer);
+      wfJaxrsFilterBuilder.headerTags(headerTags);
       GlobalTracer.register(this.tracer);
     }
   }
@@ -51,6 +56,5 @@ public class WavefrontJaxrsDynamicFeature implements DynamicFeature {
   public Tracer getTracer() {
     return this.tracer;
   }
-
 }
 

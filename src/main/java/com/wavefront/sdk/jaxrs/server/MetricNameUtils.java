@@ -4,13 +4,12 @@ import com.wavefront.sdk.common.Pair;
 
 import org.apache.commons.lang3.StringUtils;
 
-import javax.ws.rs.Path;
-import javax.ws.rs.container.ContainerResponseContext;
-import javax.ws.rs.container.ContainerRequestContext;
-import javax.ws.rs.container.ResourceInfo;
-
 import java.lang.reflect.Method;
 import java.util.Optional;
+
+import javax.ws.rs.Path;
+import javax.ws.rs.container.ContainerRequestContext;
+import javax.ws.rs.container.ResourceInfo;
 
 /**
  * A utils class to generate metric name for JAX-RS based application requests/responses.
