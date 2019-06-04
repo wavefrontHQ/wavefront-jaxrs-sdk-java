@@ -1,13 +1,12 @@
 package com.wavefront.sdk.jaxrs.client;
 
-import io.opentracing.Span;
-
 import java.net.MalformedURLException;
-
-import io.opentracing.tag.Tags;
 
 import javax.ws.rs.client.ClientRequestContext;
 import javax.ws.rs.client.ClientResponseContext;
+
+import io.opentracing.Span;
+import io.opentracing.tag.Tags;
 
 import static com.wavefront.sdk.jaxrs.Constants.JAXRS_CLIENT_COMPONENT;
 import static com.wavefront.sdk.jaxrs.Constants.WF_SPAN_HEADER;

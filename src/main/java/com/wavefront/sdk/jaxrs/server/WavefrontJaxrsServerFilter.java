@@ -5,13 +5,23 @@ import com.wavefront.internal_reporter_java.io.dropwizard.metrics5.MetricName;
 import com.wavefront.sdk.common.Pair;
 import com.wavefront.sdk.common.application.ApplicationTags;
 
-import io.opentracing.Scope;
-import io.opentracing.Span;
-import io.opentracing.SpanContext;
-import io.opentracing.Tracer;
-import io.opentracing.propagation.TextMap;
-import io.opentracing.tag.Tags;
-import io.opentracing.propagation.Format;
+import java.lang.management.ManagementFactory;
+import java.lang.reflect.Method;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.AbstractMap;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.annotation.Nullable;
 import javax.ws.rs.container.ContainerRequestContext;
@@ -22,24 +32,13 @@ import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MultivaluedMap;
 
-import java.io.IOException;
-import java.lang.management.ManagementFactory;
-import java.lang.reflect.Method;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.Optional;
-import java.util.Set;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Iterator;
-import java.util.AbstractMap;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
+import io.opentracing.Scope;
+import io.opentracing.Span;
+import io.opentracing.SpanContext;
+import io.opentracing.Tracer;
+import io.opentracing.propagation.Format;
+import io.opentracing.propagation.TextMap;
+import io.opentracing.tag.Tags;
 
 import static com.wavefront.sdk.common.Constants.NULL_TAG_VAL;
 import static com.wavefront.sdk.common.Constants.WAVEFRONT_PROVIDED_SOURCE;
@@ -65,11 +64,13 @@ public class WavefrontJaxrsServerFilter implements ContainerRequestFilter, Conta
   @Nullable
   private final Tracer tracer;
 
+  private final Set<String> headerTags;
+
   @Context
   private ResourceInfo resourceInfo;
 
   private WavefrontJaxrsServerFilter(SdkReporter wfJaxrsReporter, ApplicationTags applicationTags,
-                                     @Nullable Tracer tracer) {
+                                     @Nullable Tracer tracer, Set<String> headerTags) {
     if (wfJaxrsReporter == null)
       throw new NullPointerException("Invalid JAX-RS Reporter");
     if (applicationTags == null)
@@ -77,6 +78,7 @@ public class WavefrontJaxrsServerFilter implements ContainerRequestFilter, Conta
     this.wfJaxrsReporter = wfJaxrsReporter;
     this.applicationTags = applicationTags;
     this.tracer = tracer;
+    this.headerTags = headerTags;
   }
 
   public static final class Builder {
@@ -85,6 +87,8 @@ public class WavefrontJaxrsServerFilter implements ContainerRequestFilter, Conta
     private final ApplicationTags applicationTags;
     @Nullable
     private Tracer tracer;
+
+    private final Set<String> headerTags = new HashSet<>();
 
     public Builder(SdkReporter wfJaxrsReporter, ApplicationTags applicationTags) {
       this.wfJaxrsReporter = wfJaxrsReporter;
@@ -96,8 +100,13 @@ public class WavefrontJaxrsServerFilter implements ContainerRequestFilter, Conta
       return this;
     }
 
+    public Builder headerTags(Set<String> headerTags) {
+      this.headerTags.addAll(headerTags);
+      return this;
+    }
+
     public WavefrontJaxrsServerFilter build() {
-      return new WavefrontJaxrsServerFilter(wfJaxrsReporter, applicationTags, tracer);
+      return new WavefrontJaxrsServerFilter(wfJaxrsReporter, applicationTags, tracer, headerTags);
     }
   }
 
@@ -145,6 +154,9 @@ public class WavefrontJaxrsServerFilter implements ContainerRequestFilter, Conta
         if (parentSpanContext != null) {
           spanBuilder.asChildOf(parentSpanContext);
         }
+
+        handleHeaderTags(containerRequestContext, spanBuilder);
+
         Scope scope = spanBuilder.startActive(false);
         decorateRequest(containerRequestContext, scope.span());
         containerRequestContext.setProperty(PROPERTY_NAME, scope);
@@ -168,6 +180,24 @@ public class WavefrontJaxrsServerFilter implements ContainerRequestFilter, Conta
       totalInflight.incrementAndGet();
       statsContextThreadLocal.set(new StatsContext(startTime, startTimeCpuNanos, apiInflight,
           totalInflight));
+    }
+  }
+
+  private void handleHeaderTags(ContainerRequestContext containerRequestContext,
+                                Tracer.SpanBuilder spanBuilder) {
+    if (headerTags.size() == 0) {
+      return;
+    }
+
+    MultivaluedMap<String, String> requestHeaders = containerRequestContext.getHeaders();
+
+    for (String headerName : headerTags) {
+      if (requestHeaders.containsKey(headerName)) {
+        // In case of array value, will be added as repeated tags.
+        for (String requestHeaderValue : requestHeaders.get(headerName)) {
+          spanBuilder.withTag(headerName, requestHeaderValue);
+        }
+      }
     }
   }
 

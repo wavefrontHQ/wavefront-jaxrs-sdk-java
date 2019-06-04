@@ -8,8 +8,6 @@ import com.wavefront.sdk.common.application.ApplicationTags;
 import com.wavefront.sdk.common.application.HeartbeaterService;
 import com.wavefront.sdk.entities.metrics.WavefrontMetricSender;
 
-import javax.annotation.Nullable;
-
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Collections;
@@ -17,6 +15,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import javax.annotation.Nullable;
 
 import static com.wavefront.sdk.jaxrs.Constants.JAXRS_SERVER_COMPONENT;
 

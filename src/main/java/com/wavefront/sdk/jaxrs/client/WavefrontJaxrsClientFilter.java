@@ -4,13 +4,6 @@ import com.wavefront.sdk.common.WavefrontSender;
 import com.wavefront.sdk.common.application.ApplicationTags;
 import com.wavefront.sdk.common.application.HeartbeaterService;
 
-import io.opentracing.Span;
-import io.opentracing.SpanContext;
-import io.opentracing.Tracer;
-
-import io.opentracing.propagation.Format;
-import io.opentracing.tag.Tags;
-
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
@@ -23,9 +16,15 @@ import javax.ws.rs.client.ClientRequestFilter;
 import javax.ws.rs.client.ClientResponseContext;
 import javax.ws.rs.client.ClientResponseFilter;
 
+import io.opentracing.Span;
+import io.opentracing.SpanContext;
+import io.opentracing.Tracer;
+import io.opentracing.propagation.Format;
+import io.opentracing.tag.Tags;
+
+import static com.wavefront.sdk.jaxrs.Constants.CHILD_OF;
 import static com.wavefront.sdk.jaxrs.Constants.JAXRS_CLIENT_COMPONENT;
 import static com.wavefront.sdk.jaxrs.Constants.PROPERTY_NAME;
-import static com.wavefront.sdk.jaxrs.Constants.CHILD_OF;
 
 /**
  * A filter to generate Wavefront client side span for JAX-RS based API requests/responses.
