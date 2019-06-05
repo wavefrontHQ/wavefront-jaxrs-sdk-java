@@ -66,7 +66,7 @@ public class WavefrontJaxrsReporter implements SdkReporter {
 
   @Override
   public void registerGauge(MetricName metricName, AtomicInteger value) {
-    wfReporter.newGauge(metricName, () -> (double) value.get());
+    wfReporter.newGauge(metricName, () ->  (() -> (double) value.get()));
   }
 
   @Override
