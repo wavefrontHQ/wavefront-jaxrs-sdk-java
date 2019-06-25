@@ -9,7 +9,6 @@ import com.wavefront.sdk.jaxrs.reporter.WavefrontJaxrsReporter;
 
 import org.apache.commons.lang3.BooleanUtils;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import javax.ws.rs.container.DynamicFeature;
