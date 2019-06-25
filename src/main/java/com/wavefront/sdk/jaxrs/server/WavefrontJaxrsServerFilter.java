@@ -70,7 +70,7 @@ public class WavefrontJaxrsServerFilter implements ContainerRequestFilter, Conta
   private ResourceInfo resourceInfo;
 
   public WavefrontJaxrsServerFilter(SdkReporter wfJaxrsReporter, ApplicationTags applicationTags,
-                                     @Nullable Tracer tracer, Set<String> headerTags) {
+                                    @Nullable Tracer tracer, Set<String> headerTags) {
     if (wfJaxrsReporter == null)
       throw new NullPointerException("Invalid JAX-RS Reporter");
     if (applicationTags == null)
