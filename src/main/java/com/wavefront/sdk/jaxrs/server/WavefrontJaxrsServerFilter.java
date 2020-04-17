@@ -157,9 +157,10 @@ public class WavefrontJaxrsServerFilter implements ContainerRequestFilter, Conta
 
         handleHeaderTags(containerRequestContext, spanBuilder);
 
-        Scope scope = spanBuilder.startActive(false);
-        decorateRequest(containerRequestContext, scope.span());
-        containerRequestContext.setProperty(PROPERTY_NAME, scope);
+        Span span = spanBuilder.start();
+        Scope scope = tracer.activateSpan(span);
+        decorateRequest(containerRequestContext, span);
+        containerRequestContext.setProperty(PROPERTY_NAME, span);
       }
 
       /* Gauges
@@ -205,14 +206,11 @@ public class WavefrontJaxrsServerFilter implements ContainerRequestFilter, Conta
                                ContainerResponseContext containerResponseContext) {
     if (tracer != null) {
       try {
-        Scope scope = (Scope) containerRequestContext.getProperty(PROPERTY_NAME);
-        if (scope != null) {
-          decorateResponse(containerResponseContext, scope.span());
-          scope.close();
-          scope.span().finish();
-        }
+        Span span = (Span) containerRequestContext.getProperty(PROPERTY_NAME);
+          decorateResponse(containerResponseContext, span);
+          span.finish();
       } catch (ClassCastException ex) {
-        // no valid scope found
+        // no valid span found
       }
     }
     if (containerRequestContext != null) {
