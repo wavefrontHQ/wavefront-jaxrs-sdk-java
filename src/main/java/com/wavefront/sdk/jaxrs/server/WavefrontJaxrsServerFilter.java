@@ -32,6 +32,7 @@ import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MultivaluedMap;
 
+import com.wavefront.sdk.jaxrs.client.SpanWrapper;
 import io.opentracing.Scope;
 import io.opentracing.Span;
 import io.opentracing.SpanContext;
@@ -160,7 +161,7 @@ public class WavefrontJaxrsServerFilter implements ContainerRequestFilter, Conta
         Span span = spanBuilder.start();
         Scope scope = tracer.activateSpan(span);
         decorateRequest(containerRequestContext, span);
-        containerRequestContext.setProperty(PROPERTY_NAME, span);
+        containerRequestContext.setProperty(PROPERTY_NAME, new SpanWrapper(span, scope));
       }
 
       /* Gauges
@@ -206,11 +207,18 @@ public class WavefrontJaxrsServerFilter implements ContainerRequestFilter, Conta
                                ContainerResponseContext containerResponseContext) {
     if (tracer != null) {
       try {
-        Span span = (Span) containerRequestContext.getProperty(PROPERTY_NAME);
-          decorateResponse(containerResponseContext, span);
-          span.finish();
+        SpanWrapper spanWrapper = (SpanWrapper) containerRequestContext.getProperty(PROPERTY_NAME);
+        Scope scope = spanWrapper.getScope();
+        if (scope != null) {
+          Span span = spanWrapper.getSpan();
+          if (span != null) {
+            decorateResponse(containerResponseContext, span);
+            scope.close();
+            span.finish();
+          }
+        }
       } catch (ClassCastException ex) {
-        // no valid span found
+        // no valid SpanWrapper found
       }
     }
     if (containerRequestContext != null) {
