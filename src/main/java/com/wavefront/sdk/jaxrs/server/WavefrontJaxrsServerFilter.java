@@ -208,13 +208,15 @@ public class WavefrontJaxrsServerFilter implements ContainerRequestFilter, Conta
     if (tracer != null) {
       try {
         SpanWrapper spanWrapper = (SpanWrapper) containerRequestContext.getProperty(PROPERTY_NAME);
-        Scope scope = spanWrapper.getScope();
-        if (scope != null) {
-          Span span = spanWrapper.getSpan();
-          if (span != null) {
-            decorateResponse(containerResponseContext, span);
-            scope.close();
-            span.finish();
+        if (spanWrapper != null) {
+          Scope scope = spanWrapper.getScope();
+          if (scope != null) {
+            Span span = spanWrapper.getSpan();
+            if (span != null) {
+              decorateResponse(containerResponseContext, span);
+              scope.close();
+              span.finish();
+            }
           }
         }
       } catch (ClassCastException ex) {
