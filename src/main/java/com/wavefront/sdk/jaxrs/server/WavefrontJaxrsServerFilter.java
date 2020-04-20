@@ -214,9 +214,9 @@ public class WavefrontJaxrsServerFilter implements ContainerRequestFilter, Conta
             Span span = spanWrapper.getSpan();
             if (span != null) {
               decorateResponse(containerResponseContext, span);
-              scope.close();
               span.finish();
             }
+            scope.close();
           }
         }
       } catch (ClassCastException ex) {
