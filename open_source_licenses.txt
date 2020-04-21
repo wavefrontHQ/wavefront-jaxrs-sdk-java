@@ -1,6 +1,6 @@
 open_source_licenses.txt
 
-Wavefront by VMware JAX-RS SDK for Java 1.0 GA
+Wavefront by VMware JAX-RS SDK for Java 0.9.9 GA
 
 ======================================================================
 
@@ -28,35 +28,29 @@ of the license associated with each component.
 SECTION 1: Apache License, V2.0
 
    >>> com.fasterxml.jackson.core:jackson-annotations-2.9.0
+   >>> com.fasterxml.jackson.core:jackson-annotations-2.9.0
    >>> com.fasterxml.jackson.core:jackson-annotations-2.9.10
+   >>> com.fasterxml.jackson.core:jackson-annotations-2.9.9
    >>> com.fasterxml.jackson.core:jackson-core-2.9.10
    >>> com.fasterxml.jackson.core:jackson-core-2.9.9
-   >>> com.fasterxml.jackson.core:jackson-databind-2.9.10.3
+   >>> com.fasterxml.jackson.core:jackson-databind-2.9.10
    >>> com.fasterxml.jackson.core:jackson-databind-2.9.9.3
    >>> com.fasterxml.jackson.dataformat:jackson-dataformat-yaml-2.9.10
    >>> com.fasterxml.jackson.dataformat:jackson-dataformat-yaml-2.9.9
    >>> com.google.code.findbugs:jsr305-3.0.0
-   >>> com.google.errorprone:error_prone_annotations-2.3.4
-   >>> com.google.guava:failureaccess-1.0.1
-   >>> com.google.guava:guava-28.2-jre
-   >>> com.google.guava:listenablefuture-9999.0-empty-to-avoid-conflict-with-guava
-   >>> com.google.j2objc:j2objc-annotations-1.3
    >>> com.tdunning:t-digest-3.2
    >>> io.dropwizard.metrics5:metrics-core-5.0.0-rc2
    >>> io.dropwizard.metrics5:metrics-jvm-5.0.0-rc2
-   >>> io.opentracing:opentracing-api-0.33.0
-   >>> io.opentracing:opentracing-noop-0.33.0
-   >>> io.opentracing:opentracing-util-0.33.0
+   >>> io.opentracing:opentracing-api-0.32.0
+   >>> io.opentracing:opentracing-noop-0.32.0
+   >>> io.opentracing:opentracing-util-0.32.0
    >>> org.apache.commons:commons-lang3-3.1
    >>> org.yaml:snakeyaml-1.23
 
 
 SECTION 2: BSD-STYLE, MIT-STYLE, OR SIMILAR STYLE LICENSES
 
-   >>> org.checkerframework:checker-qual-2.10.0
    >>> org.slf4j:slf4j-api-1.7.25
-   >>> org.slf4j:slf4j-api-1.7.28
-   >>> org.slf4j:slf4j-nop-1.7.25
 
 
 SECTION 3: Common Development and Distribution License, V1.1
@@ -78,11 +72,21 @@ APPENDIX. Standard License Files
    >>> Common Development and Distribution License, V1.1
 
 
-
 --------------- SECTION 1: Apache License, V2.0 ----------
 
 Apache License, V2.0 is applicable to the following component(s).
 
+
+>>> com.fasterxml.jackson.core:jackson-annotations-2.9.0
+
+This copy of Jackson JSON processor annotations is licensed under the
+Apache (Software) License, version 2.0 ("the License").
+See the License for details about distribution rights, and the
+specific rights regarding derivate works.
+
+You may obtain a copy of the License at:
+
+http://www.apache.org/licenses/LICENSE-2.0
 
 >>> com.fasterxml.jackson.core:jackson-annotations-2.9.0
 
@@ -107,6 +111,17 @@ You may obtain a copy of the License at:
 http://www.apache.org/licenses/LICENSE-2.0
 
 
+
+>>> com.fasterxml.jackson.core:jackson-annotations-2.9.9
+
+This copy of Jackson JSON processor annotations is licensed under the
+Apache (Software) License, version 2.0 ("the License").
+See the License for details about distribution rights, and the
+specific rights regarding derivate works.
+
+You may obtain a copy of the License at:
+
+http://www.apache.org/licenses/LICENSE-2.0
 
 >>> com.fasterxml.jackson.core:jackson-core-2.9.10
 
@@ -174,7 +189,9 @@ You may obtain a copy of the License at:
 
 http://www.apache.org/licenses/LICENSE-2.0
 
->>> com.fasterxml.jackson.core:jackson-databind-2.9.10.3
+
+
+>>> com.fasterxml.jackson.core:jackson-databind-2.9.10
 
 # Jackson JSON processor
 
@@ -239,6 +256,8 @@ specific rights regarding derivate works.
 You may obtain a copy of the License at:
 
 http://www.apache.org/licenses/LICENSE-2.0
+
+
 
 >>> com.fasterxml.jackson.dataformat:jackson-dataformat-yaml-2.9.10
 
@@ -306,85 +325,13 @@ You may obtain a copy of the License at:
 
 http://www.apache.org/licenses/LICENSE-2.0
 
+
+
 >>> com.google.code.findbugs:jsr305-3.0.0
 
 License : Apache 2.0
 
 
-
->>> com.google.errorprone:error_prone_annotations-2.3.4
-
-Copyright 2016 The Error Prone Authors.
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-
->>> com.google.guava:failureaccess-1.0.1
-
-Copyright (C) 2018 The Guava Authors
-
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
-in compliance with the License. You may obtain a copy of the License at
-
-http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software distributed under the License
-is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
-or implied. See the License for the specific language governing permissions and limitations under
-the License.
-
->>> com.google.guava:guava-28.2-jre
-
-Copyright (C) 2009 The Guava Authors
-
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
-in compliance with the License. You may obtain a copy of the License at
-
-http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software distributed under the License
-is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
-or implied. See the License for the specific language governing permissions and limitations under
-the License.
-
-ADDITIONAL LICENSE INFORMATION:
-
-> PublicDomain
-
-guava-28.2-jre-sources.jar\com\google\common\cache\Striped64.java
-
-Written by Doug Lea with assistance from members of JCP JSR-166
-Expert Group and released to the public domain, as explained at
-http://creativecommons.org/publicdomain/zero/1.0/
-
->>> com.google.guava:listenablefuture-9999.0-empty-to-avoid-conflict-with-guava
-
-License : Apache 2.0
-
->>> com.google.j2objc:j2objc-annotations-1.3
-
-Copyright 2012 Google Inc. All Rights Reserved.
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
 
 >>> com.tdunning:t-digest-3.2
 
@@ -411,41 +358,39 @@ License: Apache 2.0
 
 LICENSE : APACHE 2.0
 
->>> io.opentracing:opentracing-api-0.33.0
+>>> io.opentracing:opentracing-api-0.32.0
 
 Copyright 2016-2019 The OpenTracing Authors
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+in compliance with the License. You may obtain a copy of the License at
 
 http://www.apache.org/licenses/LICENSE-2.0
 
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+Unless required by applicable law or agreed to in writing, software distributed under the License
+is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+or implied. See the License for the specific language governing permissions and limitations under
+the License.
 
 
 
->>> io.opentracing:opentracing-noop-0.33.0
+>>> io.opentracing:opentracing-noop-0.32.0
 
 Copyright 2016-2019 The OpenTracing Authors
 
-    Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
-    in compliance with the License. You may obtain a copy of the License at
+Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except
+in compliance with the License. You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+http://www.apache.org/licenses/LICENSE-2.0
 
-    Unless required by applicable law or agreed to in writing, software distributed under the License
-    is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
-    or implied. See the License for the specific language governing permissions and limitations under
-    the License.
+Unless required by applicable law or agreed to in writing, software distributed under the License
+is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express
+or implied. See the License for the specific language governing permissions and limitations under
+the License.
 
 
 
->>> io.opentracing:opentracing-util-0.33.0
+>>> io.opentracing:opentracing-util-0.32.0
 
 Copyright 2016-2019 The OpenTracing Authors
 
@@ -503,15 +448,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 
-
 --------------- SECTION 2: BSD-STYLE, MIT-STYLE, OR SIMILAR STYLE LICENSES ----------
 
 BSD-STYLE, MIT-STYLE, OR SIMILAR STYLE LICENSES are applicable to the following component(s).
 
-
->>> org.checkerframework:checker-qual-2.10.0
-
-License: MIT
 
 >>> org.slf4j:slf4j-api-1.7.25
 
@@ -535,56 +475,6 @@ MERCHANTABILITY, FITNESS    FOR    A   PARTICULAR    PURPOSE    AND
 NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
 LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
 OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
->>> org.slf4j:slf4j-api-1.7.28
-
-Copyright (c) 2004-2011 QOS.ch
-All rights reserved.
-
-Permission is hereby granted, free  of charge, to any person obtaining
-a  copy  of this  software  and  associated  documentation files  (the
-"Software"), to  deal in  the Software without  restriction, including
-without limitation  the rights to  use, copy, modify,  merge, publish,
-distribute,  sublicense, and/or sell  copies of  the Software,  and to
-permit persons to whom the Software  is furnished to do so, subject to
-the following conditions:
-
-The  above  copyright  notice  and  this permission  notice  shall  be
-included in all copies or substantial portions of the Software.
-
-THE  SOFTWARE IS  PROVIDED  "AS  IS", WITHOUT  WARRANTY  OF ANY  KIND,
-EXPRESS OR  IMPLIED, INCLUDING  BUT NOT LIMITED  TO THE  WARRANTIES OF
-MERCHANTABILITY,    FITNESS    FOR    A   PARTICULAR    PURPOSE    AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-OF CONTRACT, TORT OR OTHERWISE,  ARISING FROM, OUT OF OR IN CONNECTION
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-
-
->>> org.slf4j:slf4j-nop-1.7.25
-
-Copyright (c) 2004-2011 QOS.ch
-All rights reserved.
-
-Permission is hereby granted, free  of charge, to any person obtaining
-a  copy  of this  software  and  associated  documentation files  (the
-"Software"), to  deal in  the Software without  restriction, including
-without limitation  the rights to  use, copy, modify,  merge, publish,
-distribute,  sublicense, and/or sell  copies of  the Software,  and to
-permit persons to whom the Software  is furnished to do so, subject to
-the following conditions:
-
-The  above  copyright  notice  and  this permission  notice  shall  be
-included in all copies or substantial portions of the Software.
-
-THE  SOFTWARE IS  PROVIDED  "AS  IS", WITHOUT  WARRANTY  OF ANY  KIND,
-EXPRESS OR  IMPLIED, INCLUDING  BUT NOT LIMITED  TO THE  WARRANTIES OF
-MERCHANTABILITY,    FITNESS    FOR    A   PARTICULAR    PURPOSE    AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-OF CONTRACT, TORT OR OTHERWISE,  ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 --------------- SECTION 3: Common Development and Distribution License, V1.1 ----------
@@ -828,8 +718,7 @@ asserted against, such Contributor by reason of your accepting any such
 warranty or additional liability.
 
 END OF TERMS AND CONDITIONS 
-
-
+
 --------------- SECTION 2: Creative Commons Attribution 2.5  -----------
 
 CREATIVE COMMONS CORPORATION IS NOT A LAW FIRM AND DOES NOT PROVIDE LEGAL SERVICES. DISTRIBUTION OF THIS LICENSE DOES NOT CREATE AN ATTORNEY-CLIENT RELATIONSHIP. CREATIVE COMMONS PROVIDES THIS INFORMATION ON AN "AS-IS" BASIS. CREATIVE COMMONS MAKES NO WARRANTIES REGARDING THE INFORMATION PROVIDED, AND DISCLAIMS LIABILITY FOR DAMAGES RESULTING FROM ITS USE.
@@ -1004,7 +893,8 @@ As between Initial Developer and the Contributors, each party is responsible for
 
 NOTICE PURSUANT TO SECTION 9 OF THE COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) 
 The code released under the CDDL shall be governed by the laws of the State of California (excluding conflict-of-law provisions). Any litigation relating to this License shall be subject to the jurisdiction of the Federal Courts of the Northern District of California and the state courts of the State of California, with venue lying in Santa Clara County, California.
-
+
+
 ======================================================================
 
 To the extent any open source components are licensed under the GPL
@@ -1023,4 +913,4 @@ Source Files is valid for three years from the date you acquired or last used th
 Software product. Alternatively, the Source Files may accompany the
 VMware service.
 
-[WAVEFRONTJAXRSSDKJAVA10GAAB042120]
+[WAVEFRONTJAXRSSDKJAVA099GASP100419]
