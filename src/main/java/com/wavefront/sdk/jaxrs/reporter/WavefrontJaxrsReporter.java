@@ -163,7 +163,7 @@ public class WavefrontJaxrsReporter implements SdkReporter {
           prefixedWith(SDK_METRIC_PREFIX + ".jaxrs").withSource(source).
           withReporterPointTags(pointTags).build(wavefrontSender);
 
-      double sdkVersion = Utils.getSemVer();
+      double sdkVersion = Utils.getSemVerGauge("wavefront-jaxrs-sdk-java");
       sdkMetricsReporter.newGauge(new MetricName("version", Collections.emptyMap()),
           () -> (() -> sdkVersion));
 
